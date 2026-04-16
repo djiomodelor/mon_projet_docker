@@ -36,6 +36,4 @@ pipeline {
             }
         }
     }
-}git add jenkins/Jenkinsfile
-git commit -m "Correction syntaxe agent Docker pour Windows"
-git push
+}
