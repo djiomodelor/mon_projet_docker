@@ -1,10 +1,5 @@
-pipeline {
-    agent {
-        docker {
-            image 'docker:latest'
-            args '-v //./pipe/docker_engine://./pipe/docker_engine'
-        }
-    }
+﻿pipeline {
+    agent any
 
     environment {
         DOCKER_HUB_CREDENTIALS_ID = 'docker-hub-credentials'
@@ -20,19 +15,14 @@ pipeline {
 
         stage('Image') {
             steps {
-                script {
-                    docker.build("${DOCKER_IMAGE_NAME}:latest")
-                }
+                bat 'docker build -t %DOCKER_IMAGE_NAME%:latest .'
             }
         }
 
         stage('Publication') {
             steps {
-                script {
-                    docker.withRegistry('', DOCKER_HUB_CREDENTIALS_ID) {
-                        docker.image("${DOCKER_IMAGE_NAME}:latest").push()
-                    }
-                }
+                bat 'docker login -u duranka -p VOTRE_MOT_DE_PASSE'
+                bat 'docker push %DOCKER_IMAGE_NAME%:latest'
             }
         }
     }
