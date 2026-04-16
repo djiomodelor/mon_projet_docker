@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_HUB_CREDENTIALS_ID = 'docker-hub-credentials'
+        DOCKER_IMAGE_NAME = 'duranka/durant-flask-app'
+    }
+
+    stages {
+        stage('Clonage') {
+            steps {
+                git branch: 'main', url: 'https://github.com/djiomodelor/mon_projet_docker.git'
+            }
+        }
+
+        stage('Image') {
+            steps {
+                script {
+                    docker.build("${DOCKER_IMAGE_NAME}:latest")
+                }
+            }
+        }
+
+        stage('Publication') {
+            steps {
+                script {
+                    docker.withRegistry('', DOCKER_HUB_CREDENTIALS_ID) {
+                        docker.image("${DOCKER_IMAGE_NAME}:latest").push()
+                    }
+                }
+            }
+        }
+    }
+}
