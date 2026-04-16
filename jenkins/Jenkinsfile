@@ -2,8 +2,7 @@ pipeline {
     agent {
         docker {
             image 'docker:latest'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-            reusable false
+            args '-v //./pipe/docker_engine://./pipe/docker_engine'
         }
     }
 
@@ -37,4 +36,6 @@ pipeline {
             }
         }
     }
-}
+}git add jenkins/Jenkinsfile
+git commit -m "Correction syntaxe agent Docker pour Windows"
+git push
