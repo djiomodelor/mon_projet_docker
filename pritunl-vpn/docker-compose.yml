@@ -1,0 +1,35 @@
+﻿services:
+  mongodb:
+    image: mongo:6.0
+    container_name: pritunl-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - vpn_network
+    expose:
+      - "27017"
+
+  pritunl:
+    image: goofball222/pritunl:latest
+    container_name: pritunl-server
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - "443:443"
+      - "1194:1194/udp"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/pritunl
+    volumes:
+      - pritunl_data:/var/lib/pritunl
+    depends_on:
+      - mongodb
+    networks:
+      - vpn_network
+
+volumes:
+  mongo_data:
+  pritunl_data:
+
+networks:
+  vpn_network:
