@@ -24,7 +24,7 @@ pipeline {
 
         stage('Publication') {
             steps {
-                bat 'docker login -u duranka -p VOTRE_MOT_DE_PASSE'
+                bat 'docker login -u duranka -p Durant@123'
                 bat 'docker push duranka/durant-flask-app:latest'
             }
         }
