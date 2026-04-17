@@ -1,8 +1,11 @@
-﻿pipeline {
+cd C:\Users\DURANT\mon_projet_docker
+
+# Créer un nouveau Jenkinsfile sans BOM
+[System.IO.File]::WriteAllText("$PWD\jenkins\Jenkinsfile", @'
+pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_CREDENTIALS_ID = 'docker-hub-credentials'
         DOCKER_IMAGE_NAME = 'duranka/durant-flask-app'
     }
 
@@ -15,15 +18,16 @@
 
         stage('Image') {
             steps {
-                bat 'docker build -t %DOCKER_IMAGE_NAME%:latest .'
+                bat 'docker build -t duranka/durant-flask-app:latest .'
             }
         }
 
         stage('Publication') {
             steps {
                 bat 'docker login -u duranka -p VOTRE_MOT_DE_PASSE'
-                bat 'docker push %DOCKER_IMAGE_NAME%:latest'
+                bat 'docker push duranka/durant-flask-app:latest'
             }
         }
     }
 }
+'@, [System.Text.UTF8Encoding]::new($false))
